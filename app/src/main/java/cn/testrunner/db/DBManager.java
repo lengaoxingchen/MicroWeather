@@ -63,4 +63,16 @@ public class DBManager {
         }
         return null;
     }
+
+    /*
+     * 存储城市天气要求最多存储5个城市信息,超过5个城市就不能存储了
+     * 获取目前已经存数的城市数量
+     */
+
+    public static int getCityCount() {
+        Cursor cursor = database.query("info", null, null, null, null, null, null);
+        int count = cursor.getCount();
+        return count;
+    }
+
 }

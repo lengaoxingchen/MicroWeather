@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import cn.testrunner.base.BaseFragment;
 import cn.testrunner.bean.WeatherBean;
 import cn.testrunner.db.DBManager;
 import com.google.gson.Gson;

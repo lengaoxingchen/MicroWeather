@@ -1,13 +1,14 @@
-package cn.testrunner;
+package cn.testrunner.city_manager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import cn.testrunner.R;
 
-public class CityManagerActivity extends AppCompatActivity {
+public class SearchCityActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_city_manager);
+        setContentView(R.layout.activity_search_city);
     }
 }

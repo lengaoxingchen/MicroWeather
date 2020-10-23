@@ -1,4 +1,4 @@
-package cn.testrunner;
+package cn.testrunner.base;
 
 import android.app.Application;
 import cn.testrunner.db.DBManager;

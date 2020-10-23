@@ -1,4 +1,4 @@
-package cn.testrunner;
+package cn.testrunner.base;
 
 import androidx.fragment.app.Fragment;
 import org.xutils.common.Callback;
