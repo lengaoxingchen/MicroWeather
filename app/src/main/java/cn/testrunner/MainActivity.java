@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (cityList.size() == 0) {
             cityList.add("北京");
+            cityList.add("上海");
+            cityList.add("沈阳");
         }
 
         //初始化ViewPager页面的方法

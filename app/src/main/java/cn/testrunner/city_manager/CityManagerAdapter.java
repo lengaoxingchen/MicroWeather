@@ -55,7 +55,7 @@ public class CityManagerAdapter extends BaseAdapter {
         //获取今日天气情况
         WeatherBean.ResultsBean.WeatherDataBean dataBean = weatherBean.getResults().get(0).getWeather_data().get(0);
         holder.conTv.setText("天气:" + dataBean.getWeather());
-        String[] split = dataBean.getDate().split(":");
+        String[] split = dataBean.getDate().split("：");
         String todayTemp = split[1].replace(")", "");
         holder.currentTempTv.setText(todayTemp);
         holder.windTv.setText(dataBean.getWind());

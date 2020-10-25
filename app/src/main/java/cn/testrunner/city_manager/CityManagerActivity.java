@@ -18,6 +18,7 @@ public class CityManagerActivity extends AppCompatActivity implements View.OnCli
     ImageView addIv, backIv, deleteIv;
     ListView cityLv;
     List<DatabaseBean> mDatas = new ArrayList<>(); //显示列表数据源
+    private CityManagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +27,15 @@ public class CityManagerActivity extends AppCompatActivity implements View.OnCli
         addIv = findViewById(R.id.city_iv_add);
         backIv = findViewById(R.id.city_iv_back);
         deleteIv = findViewById(R.id.city_iv_delete);
+        cityLv = findViewById(R.id.city_lv);
 
         //添加点击事件
         addIv.setOnClickListener(this);
         backIv.setOnClickListener(this);
         deleteIv.setOnClickListener(this);
         //设置适配器
+        adapter = new CityManagerAdapter(this, mDatas);
+        cityLv.setAdapter(adapter);
 
     }
 
@@ -56,5 +60,17 @@ public class CityManagerActivity extends AppCompatActivity implements View.OnCli
                 startActivity(intent1);
                 break;
         }
+    }
+
+    /*
+    获取数据库当中真是数据源,添加到原有数据源当中,提示适配器更新
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        List<DatabaseBean> list = DBManager.queryAllInfo();
+        mDatas.clear();
+        mDatas.addAll(list);
+        adapter.notifyDataSetChanged();
     }
 }
