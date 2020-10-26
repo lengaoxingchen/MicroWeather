@@ -1,6 +1,8 @@
 package cn.testrunner;
 
 import android.content.Intent;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //表示选中城市的集合
     List<String> cityList = DBManager.queryAllCityName();  //获取数据库包含的城市信息列表
 
-    //表示ViewPager的页数指数器下半身股胡歌
+    //表示ViewPager的页数指数器集合
     List<ImageView> imgList = new ArrayList<>();
     private CityFragmentPagerAdapter adapter;
 
@@ -41,8 +43,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (cityList.size() == 0) {
             cityList.add("北京");
-            cityList.add("上海");
-            cityList.add("沈阳");
+        }
+
+        /*
+        因为可能搜索界面点击跳转到此界面会传值,所以获取一下
+         */
+        try {
+
+            Intent intent = getIntent();
+            String city = intent.getStringExtra("city");
+            if (!cityList.contains(city) && !TextUtils.isEmpty(city)) {
+                cityList.add(city);
+            }
+
+        } catch (Exception e) {
+            Log.i("animee","程序出问题了");
         }
 
         //初始化ViewPager页面的方法
