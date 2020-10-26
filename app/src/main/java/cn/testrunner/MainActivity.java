@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onPageSelected(int position) {
-                for (int i = 0; i < imgList.size(); i++) {
-                    imgList.get(i).setImageResource(R.mipmap.a1);
+                for (ImageView imageView : imgList) {
+                    imageView.setImageResource(R.mipmap.a1);
                 }
                 imgList.get(position).setImageResource(R.mipmap.a2);
             }

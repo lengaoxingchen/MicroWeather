@@ -81,7 +81,7 @@ public class DBManager {
     public static List<DatabaseBean> queryAllInfo() {
         Cursor cursor = database.query("info", null, null, null, null, null, null);
         List<DatabaseBean> list = new ArrayList<>();
-        while  (cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndex("_id"));
             String city = cursor.getString(cursor.getColumnIndex("city"));
             String content = cursor.getString(cursor.getColumnIndex("content"));
@@ -89,6 +89,13 @@ public class DBManager {
             list.add(bean);
         }
         return list;
+    }
+
+    /*
+   根据城市名称,删除这个城市在数据库当中的数据
+     */
+    public static int deleteInfoByCity(String city) {
+        return database.delete("info", "city=?", new String[]{city});
     }
 
 }
