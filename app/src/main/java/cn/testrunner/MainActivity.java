@@ -1,11 +1,13 @@
 package cn.testrunner;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageView addCityIv, moreIv;
     LinearLayout pointLayout;
     ViewPager mainVp;
+    RelativeLayout outLayout;
 
     //ViewPager的数据源
     List<Fragment> fragmentList = new ArrayList<>();
@@ -29,15 +32,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //表示ViewPager的页数指数器集合
     List<ImageView> imgList = new ArrayList<>();
     private CityFragmentPagerAdapter adapter;
+    private SharedPreferences pref;
+    private int bgNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         addCityIv = findViewById(R.id.main_iv_add);
         moreIv = findViewById(R.id.main_iv_more);
         pointLayout = findViewById(R.id.main_layout_point);
         mainVp = findViewById(R.id.main_vp);
+        outLayout = findViewById(R.id.main_out_layout);
+
+        //交换壁纸
+        exchangeBg();
+
         addCityIv.setOnClickListener(this);
         moreIv.setOnClickListener(this);
 
@@ -57,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
         } catch (Exception e) {
-            Log.i("animee","程序出问题了");
+            Log.i("animee", "程序出问题了");
         }
 
         //初始化ViewPager页面的方法
@@ -72,6 +84,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //设置ViewPager页面监听
         setPagerListener();
+    }
+
+    //换壁纸的函数
+    public void exchangeBg() {
+        pref = getSharedPreferences("bg_pref", MODE_PRIVATE);
+        bgNum = pref.getInt("bg", 2);
+        switch (bgNum) {
+            case 0:
+                outLayout.setBackgroundResource(R.mipmap.bg);
+                break;
+            case 1:
+                outLayout.setBackgroundResource(R.mipmap.bg2);
+                break;
+            case 2:
+                outLayout.setBackgroundResource(R.mipmap.bg3);
+                break;
+        }
     }
 
     private void setPagerListener() {
@@ -132,9 +161,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.setClass(this, CityManagerActivity.class);
                 break;
             case R.id.main_iv_more:
+                intent.setClass(this, MoreActivity.class);
                 break;
             default:
         }
         startActivity(intent);
+    }
+
+    /*
+    页面重新加载时会调用的函数,这个函数在页面获取焦点之前进行调用,此处完成ViewPager页数的更新
+     */
+    @Override
+    protected void onRestart() {
+
+        super.onRestart();
+
+        //获取数据库方式还剩下的城市集合
+        List<String> list = DBManager.queryAllCityName();
+        if (list.size() == 0) {
+            list.add("北京");
+        }
+        cityList.clear();  //重新加载之前,清空原来的数据源
+        cityList.addAll(list);
+
+        //剩余城市也要创建对应的fragment页面
+        fragmentList.clear();
+        initPager();
+        adapter.notifyDataSetChanged();
+        //页面数量发生改变,指示器的数量也会发生变化,重新设置添加指示器
+        imgList.clear();
+        pointLayout.removeAllViews();  //将布局中所有元素全部移除
+        initPoint();
+        mainVp.setCurrentItem(fragmentList.size() - 1);
     }
 }

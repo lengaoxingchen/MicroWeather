@@ -1,6 +1,7 @@
 package cn.testrunner;
 
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,14 +22,20 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class CityWeatherFragment extends BaseFragment implements View.OnClickListener {
     TextView tempTv, cityTv, conditionTv, windTv, tempRangeTv, dateTv, clothIndexTv, carIndexTv, coldIndexTv, sportIndexTv, raysIndexTv;
     ImageView dayTv;
     LinearLayout futureLayout;
+    ScrollView fragLayout;
     String url1 = "http://api.map.baidu.com/telematics/v3/weather?location=";
     String url2 = "&output=json&ak=FkPhtMBK0HTIQNh7gG4cNUttSTyr0nzo";
     private List<WeatherBean.ResultsBean.IndexBean> indexList;
     String city;
+
+    private SharedPreferences pref;
+    private int bgNum;
 
     @Nullable
     @Override
@@ -43,6 +51,23 @@ public class CityWeatherFragment extends BaseFragment implements View.OnClickLis
         //调用父类获取数据的方法
         loadData(url);
         return view;
+    }
+
+    //换壁纸的函数
+    public void exchangeBg() {
+        pref = getActivity().getSharedPreferences("bg_pref", MODE_PRIVATE);
+        bgNum = pref.getInt("bg", 2);
+        switch (bgNum) {
+            case 0:
+                fragLayout.setBackgroundResource(R.mipmap.bg);
+                break;
+            case 1:
+                fragLayout.setBackgroundResource(R.mipmap.bg2);
+                break;
+            case 2:
+                fragLayout.setBackgroundResource(R.mipmap.bg3);
+                break;
+        }
     }
 
     @Override
@@ -156,6 +181,9 @@ public class CityWeatherFragment extends BaseFragment implements View.OnClickLis
         raysIndexTv = view.findViewById(R.id.frag_index_tv_rays);
         dayTv = view.findViewById(R.id.frag_iv_today);
         futureLayout = view.findViewById(R.id.frag_center_layout);
+        fragLayout = view.findViewById(R.id.out_layout);
+        exchangeBg();
+
         //设置点击事件监听
         clothIndexTv.setOnClickListener(this);
         sportIndexTv.setOnClickListener(this);

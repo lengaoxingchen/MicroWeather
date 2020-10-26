@@ -98,4 +98,11 @@ public class DBManager {
         return database.delete("info", "city=?", new String[]{city});
     }
 
+    /*
+    删除表当中的所有的数据信息
+     */
+    public static void deleteAllInfo() {
+        String sql = "delete from info";
+        database.execSQL(sql);
+    }
 }
